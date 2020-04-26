@@ -35,7 +35,23 @@ def scrape_stackoverflow(term):
       jobs.append(job)
   return jobs
 
-
+def scrape_wework(term):
+  jobs=[]
+  r= requests.get(f'https://weworkremotely.com/remote-jobs/search?term={term}',headers=headers)
+  soup = BeautifulSoup(r.text, 'html.parser')
+  results = soup.find_all('li', {'class': 'feature'})
+  for x in results:
+    title= x.find('span',{'class':'title'}).text
+    company= x.find('span',{'class':'company'}).text
+    link= x.a.get('href')
+    if title and link and company:
+      job = {
+            "title": title,
+            "link": f"https://weworkremotely.com{link}",
+            "company": company
+            }
+      jobs.append(job)
+  return jobs
 
 
 app = Flask('jobs')
