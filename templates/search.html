@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     <title>Remote jobs</title>
+     <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet"></link>
+  </head>
+
+  <body>
+    <header>
+      <h1>Remote jobs</h1>
+      <h3> {{count}} {{term}} jobs found.</h3>
+      <a href='/'>go back</a>
+	  </header>
+    <main>
+      {% for job in jobs %}
+      <div>
+        <h3>{{job.title}}</h3>
+        <h4>{{job.company}}</h4>
+        <a href='{{job.link}}' target="_blank">Apply</a>
+      </div>
+      <hr> 
+      {%endfor%}
+    </main>
+  </body>
+</html>

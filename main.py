@@ -77,4 +77,15 @@ app = Flask('jobs')
 def home():
   return render_template('home.html')
 
+@app.route('/search')
+def search():
+  term = request.args.get('term')
+  if not db.get(term):
+    db[term] = scrape_remoteok(term)
+    db[term].extend(scrape_stackoverflow(term))
+    db[term].extend(scrape_wework(term))
+  jobs=db[term]
+  count= len(jobs)
+  return render_template('search.html',jobs=jobs,count=count,term=term)
+
 app.run(host="0.0.0.0", debug=True)
