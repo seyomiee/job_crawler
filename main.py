@@ -53,6 +53,23 @@ def scrape_wework(term):
       jobs.append(job)
   return jobs
 
+def scrape_remoteok(term):
+  jobs=[]
+  r= requests.get(f'https://remoteok.io/remote-dev+{term}-jobs',headers=headers)
+  soup = BeautifulSoup(r.text, 'html.parser')
+  results = soup.find_all('td',{'class':'company_and_position'})
+  for x in results:
+    title= x.h2.text
+    company= x.find('a',{'class':'companyLink'}).h3.text
+    link= x.a.get('href')
+    if title and link and company:
+      job = {
+            "title": title,
+            "link": f"https://remoteok.io/{link}",
+            "company": company
+            }
+      jobs.append(job)
+  return jobs
 
 app = Flask('jobs')
 
