@@ -7,6 +7,7 @@ import csv
 import requests
 from flask import Flask, render_template, request, Response 
 from bs4 import BeautifulSoup
+from io import StringIO
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36"
@@ -88,4 +89,21 @@ def search():
   count= len(jobs)
   return render_template('search.html',jobs=jobs,count=count,term=term)
 
+@app.route('/export')
+def export():
+  term=request.args.get('term')
+  output_stream = StringIO()
+  writer = csv.writer(output_stream)
+  writer.writerow(["title", "company", "link"])
+  for item in db[term]:
+    writer.writerow(list(item.values()))
+  
+  response = Response(
+        output_stream.getvalue(), 
+        mimetype='text/csv', 
+        content_type='application/octet-stream',
+    )
+  response.headers["Content-Disposition"] = f"attachment; filename={term}.csv"
+  return response 
+  
 app.run(host="0.0.0.0", debug=True)
