@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <title>
-      Remote Jobs   </title>
-    <link href={{url_for('static', filename='style.css')}} rel="stylesheet">
-    </link>
-  </head>
+<head>
+	<title>
+		Remote Jobs </title>
+	<link href={{url_for( 'static', filename='style.css' )}} rel="stylesheet">
+	</link>
+</head>
 
-  <body>
-    {% include 'header.html' %}
-   
-    <main>
-      <form action='/search' method='get'>
+<body>
+	{% include 'header.html' %} 
+</body>
 
-        <input placeholder="i.e python" required name="term"/>
-        <button type="submit">Find my job</button>
-      </form>
-    </main>
-    {% include 'footer.html' %}
-  </body>
 </html>

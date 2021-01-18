@@ -1,26 +1,75 @@
 <!DOCTYPE html>
 <html>
   <head>
-     <title>Remote jobs</title>
-     <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet"></link>
+     <title>Remote jobs | {{term}}</title>
+     <link href={{ url_for( 'static', filename='style.css' ) }} rel="stylesheet"></link>
   </head>
 
   <body>
-    <header>
-      <h1>Remote jobs</h1>
-      <h3> {{count}} {{term}} jobs found.</h3>
-      <h5><a href="/export?term={{ term }}">Export to CSV</a></h5>
-      <a href='/'>go back</a>
-	  </header>
+    {% include 'header.html' %}
+    <section class="toolbar">
+			<div class="toolbar__column">
+				<p class="search-result">{{count}} remote <b>{{term}}</b> jobs found.</p>
+            </div>
+            <div class="toolbar__column">
+                <a href="/export?term={{term}}"><b>Export to CSV</b></a>
+                <a 
+                href='/'
+                class="back">
+                <b> go back </b>
+                </a>
+            </div>
+        </section>
+
     <main>
-      {% for job in jobs %}
-      <div>
-        <h3>{{job.title}}</h3>
-        <h4>{{job.company}}</h4>
-        <a href='{{job.link}}' target="_blank">Apply</a>
-      </div>
-      <hr> 
-      {%endfor%}
+      <section class="job-container">
+        {% for job in jobs %}
+        <div class="job">
+          <div class="job__column">
+            <h3 class="title">{{job.title}}</h3>
+            <h4 class="company">{{job.company}}</h4>
+          </div>
+          <div class="job__column">
+            <a href='{{job.link}}' target="_blank">
+              <em>Apply</em></a>
+          </div>
+        </div>
+
+          {%endfor%}
+        </section>
+        {% if page.count > 1 %}
+              <section class="pagination">
+                  <div class="pagination__column">
+                      {% if page.curr > 1 %}
+                      <a href="/search?term={{term}}&page={{page.curr - 1}}">
+                          <span>Prev</span>
+                      </a>
+                  </div>
+                      {% endif %}
+                  </div>
+                <div class="pagination__column">
+                {% for p in range(page.start, page.end) %}
+                {% if p == page.curr %}
+                    <span><b>{{p}}</b></span>
+                {% else %}
+                    <a href="/search?term={{term}}&page={{p}}">
+                        <span>{{p}}</span>
+                    </a>
+                {% endif %}
+                {% endfor %}
+                </div>
+                <div class="pagination__column">
+                {% if page.curr < page.count %}
+                    <a href="/search?term={{term}}&page={{page.curr + 1}}">
+                        <span>Next</span>
+                    </a>
+                {% endif %}
+                </div>
+            </section>
+           {% endif %}
+	         </main>
+      {% include 'footer.html' %}
+         </script>
+        </body>
     </main>
-  </body>
 </html>
